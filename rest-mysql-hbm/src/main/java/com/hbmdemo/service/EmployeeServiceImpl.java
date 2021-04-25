@@ -1,15 +1,19 @@
 package com.hbmdemo.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbmdemo.dao.EmployeeRepository;
 import com.hbmdemo.entities.Employee;
 import com.hbmdemo.exception.EmployeeNotFoundException;
 
 @Component
+@Transactional(isolation = Isolation.SERIALIZABLE,timeout = 10,rollbackFor = {SQLException.class})
 public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
