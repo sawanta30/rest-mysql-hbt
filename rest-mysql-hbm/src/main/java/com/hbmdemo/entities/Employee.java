@@ -4,30 +4,35 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.annotation.Generated;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.hbmdemo.util.EmployeeIdGenerator;
 
 @Entity
 @Table(name = "employee")
 public class Employee implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	private Long eid;
 	
 	private String firstname;
@@ -51,14 +56,13 @@ public class Employee implements Serializable{
 	@CreationTimestamp
 	private LocalDateTime createdTimestamp;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@JoinColumn(name = "eid_aid",updatable = false)
 	private Address address;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@JoinColumn(name = "eid_sid",updatable = false)
 	private Salary salary;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Department department;
 	
 	
 	public Address getAddress() {
@@ -157,19 +161,5 @@ public class Employee implements Serializable{
 	public void setSalary(Salary salary) {
 		this.salary = salary;
 	}
-
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		System.out.println(department);
-		//department.setDeptId(serialVersionUID);
-		this.department = department;
-	}
-	
-	
-
-	
 
 }

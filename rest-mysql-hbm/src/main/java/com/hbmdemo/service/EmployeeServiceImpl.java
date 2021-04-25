@@ -35,12 +35,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee updateEmployee(Long eid, Employee employee) {
-		if (employeeRepository.existsById(eid)) {
-			employee.setEid(eid);
-			return employeeRepository.save(employee);
-		}else {
-			throw new EmployeeNotFoundException(10012, eid,"Error occured while updating employee details","Employee not present in database");
-		}
+		
+			Employee emp = employeeRepository.findById(eid)
+											.orElseThrow(()->
+			new EmployeeNotFoundException(10011, eid,"Error occured while getting employee details","Employee not present in database"));
+			emp = setPeristentEmployee(emp, employee);
+			return employeeRepository.save(emp);
+		
 	}
 
 	@Override
@@ -55,6 +56,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void deleteAllEmployees() {
 		employeeRepository.deleteAll();
 		
+	}
+	
+	private Employee setPeristentEmployee(Employee dbObject,Employee newObject) {
+		dbObject.getAddress().setAddressLine(newObject.getAddress().getAddressLine());
+		dbObject.getAddress().setDistrict(newObject.getAddress().getDistrict());
+		dbObject.getAddress().setState(newObject.getAddress().getState());
+		dbObject.getAddress().setCountry(newObject.getAddress().getCountry());
+		dbObject.getAddress().setPincode(newObject.getAddress().getPincode());
+		
+		dbObject.getSalary().setSalary(newObject.getSalary().getSalary());
+		dbObject.getSalary().setSlab(newObject.getSalary().getSlab());
+		
+		dbObject.setFirstname(newObject.getFirstname());
+		dbObject.setLastname(newObject.getLastname());
+		dbObject.setDateOfBirth(newObject.getDateOfBirth());
+		dbObject.setDateOfJoining(newObject.getDateOfJoining());
+		dbObject.setEmail(newObject.getEmail());
+		dbObject.setPan(newObject.getPan());
+		dbObject.setMobile(newObject.getMobile());
+		
+		return dbObject;
 	}
 
 	

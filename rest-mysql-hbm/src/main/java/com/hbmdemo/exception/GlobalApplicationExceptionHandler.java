@@ -11,12 +11,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice()
 public class GlobalApplicationExceptionHandler {
 
+	@ExceptionHandler(value = {Exception.class })
+	public ResponseEntity<GenericResponse> handleException(Exception exception) {
+		GenericResponse er = new GenericResponse(exception.getMessage());
+		return new ResponseEntity<GlobalApplicationExceptionHandler.GenericResponse>(er, new HttpHeaders(),
+				HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(value = {EmployeeNotFoundException.class })
-	public ResponseEntity<ErrorResponse> handleApplicationException(EmployeeNotFoundException exception) {
+	public ResponseEntity<ErrorResponse> handleEmployeeNotFoundException(EmployeeNotFoundException exception) {
 		ErrorResponse er = new ErrorResponse(exception.getErrorCode(), exception.getMessage(), exception.getDescription()+" : "+exception.getEid(),ZonedDateTime.now());
 		return new ResponseEntity<GlobalApplicationExceptionHandler.ErrorResponse>(er, new HttpHeaders(),
 				HttpStatus.BAD_REQUEST);
 	}
+	
+	
 
 	class ErrorResponse {
 		int errorCode;
@@ -67,6 +76,24 @@ public class GlobalApplicationExceptionHandler {
 		
 		
 
+	}
+	class GenericResponse{
+		String messgae;
+		
+		
+
+		public GenericResponse(String messgae) {
+			this.messgae = messgae;
+		}
+
+		public String getMessgae() {
+			return messgae;
+		}
+
+		public void setMessgae(String messgae) {
+			this.messgae = messgae;
+		}
+		
 	}
 	
 

@@ -13,6 +13,7 @@ public class Salary {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long sid;
 	private Double salary;
+	private String slab;
 	
 	public Long getSid() {
 		return sid;
@@ -26,6 +27,14 @@ public class Salary {
 	public void setSalary(Double salary) {
 		this.salary = salary;
 	}
+	public String getSlab() {
+		return slab;
+	}
+	public void setSlab(String slab) {
+		this.slab = slab;
+	}
+	
+	
 	
 	
 }
